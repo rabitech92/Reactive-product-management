@@ -35,8 +35,7 @@ public class CustomerController {
     public Mono<ResponseEntity<CustomerDto>> getCustomerById(@PathVariable String id) {
         return customerService
                 .getCustomerById(id)
-                .map(ResponseEntity::ok)
-                .switchIfEmpty(Mono.just(ResponseEntity.notFound().build()));
+                .map(response -> ResponseEntity.status(HttpStatus.ACCEPTED).body(response));
     }
 
     @DeleteMapping("/{id}")

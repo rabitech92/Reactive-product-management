@@ -24,7 +24,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Flux<CustomerDto> getAllCustomer() {
         return customerRepository.findAll()
-                .map(customer -> new CustomerDto()); // Map each Customer to CustomerDto
+                .map(customer -> modelMapper.map(customer,CustomerDto.class)); // Map each Customer to CustomerDto
     }
 
     @Override
@@ -39,11 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
     public Mono<CustomerDto> getCustomerById(String id) {
         return customerRepository
                 .findById(id)
-                .map(customer -> modelMapper.map(customer,CustomerDto.class))
-                .switchIfEmpty(
-Mono.error(new NoSuchElementException("Customer not found with id: " + id)));
-
-    }
+                .map(customer -> modelMapper.map(customer,CustomerDto.class));    }
 
     @Override
     public Mono<Void> deleteCustomer(String id) {

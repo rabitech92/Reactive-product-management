@@ -25,18 +25,26 @@ public class CustomerController {
     }
 
     @PostMapping
-    public Mono<ResponseEntity<CustomerDto>> addCustomer(@RequestBody CustomerDto customerDto){
+    public Mono<ResponseEntity<CustomerDto>> addCustomer(@RequestBody(required = false) CustomerDto customerDto) {
+        if (customerDto == null) {
+            return Mono.just(ResponseEntity.badRequest().body(null)); // Return 400 Bad Request
+        }
+
         return customerService
                 .saveCustomer(customerDto)
-                .map(response -> ResponseEntity.status(HttpStatus.CREATED).body(response));
+                .map(response -> ResponseEntity.status(HttpStatus.CREATED).body(response))
+                .defaultIfEmpty(ResponseEntity.badRequest().build()); // Handle empty response
     }
 
     @GetMapping("/{id}")
     public Mono<ResponseEntity<CustomerDto>> getCustomerById(@PathVariable String id) {
         return customerService
                 .getCustomerById(id)
-                .map(response -> ResponseEntity.status(HttpStatus.ACCEPTED).body(response));
+                .map(response -> ResponseEntity.status(HttpStatus.ACCEPTED).body(response))
+                .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(null))); // You can replace 'null' with a custom error message DTO
     }
+
 
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<String>> deleteCustomer(@PathVariable String id) {

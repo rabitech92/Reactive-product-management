@@ -21,16 +21,16 @@ services:
     volumes:
       - mongo_data:/data/db
     restart: always
-#  mysql:
-#    image: mysql:8.0
-#    container_name: mysql-db
-#    environment:
-#      MYSQL_ROOT_PASSWORD: Admin123
-#      MYSQL_DATABASE: mydb
-#      MYSQL_USER: root
-#      MYSQL_PASSWORD: Admin123
-#    ports:
-#      - "3306:3306"
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: Admin123
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: Admin123
+    ports:
+      - "3306:3306"
 
 volumes:
   mongo_data:
